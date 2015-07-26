@@ -6,12 +6,30 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 namespace PsRipper
 {
     public partial class UserControlPsRipper : UserControl
     {
         private PsRipperExtension _extension;
+
+        public List<string> VideoMimeTypes
+        {
+            get
+            {
+                return txtVideoMimeTypes.Lines.ToList();
+            }
+        }
+
+
+        public string SaveLocation
+        {
+            get
+            {
+                return txtSaveLocation.Text;
+            }
+        }
 
         public UserControlPsRipper(PsRipperExtension extension)
         {
@@ -37,6 +55,17 @@ namespace PsRipper
         public void DisplayMessage(string message)
         {
             this.lblMessage.Text = message;
+        }
+
+        private void OnCourseSelectionChanged(object sender, EventArgs e)
+        {
+            var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            txtSaveLocation.Text = Path.Combine(desktopPath, "PsRipper", ddlCourse.Text);
+        }
+
+        private void OnCourseEnter(object sender, EventArgs e)
+        {
+            MessageBox.Show("entering");
         }
     }
 }
