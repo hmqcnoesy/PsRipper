@@ -7,12 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace PsRipper
 {
     public partial class UserControlPsRipper : UserControl
     {
         private PsRipperExtension _extension;
+
+        public PsInfo PsInfo { get; set; }
+
+        public PsCourse SelectedCourse { get; set; }
 
         public List<string> VideoMimeTypes
         {
@@ -31,24 +37,11 @@ namespace PsRipper
             }
         }
 
+
         public UserControlPsRipper(PsRipperExtension extension)
         {
             InitializeComponent();
             _extension = extension;
-        }
-
-        private void OnClickStartFinish(object sender, EventArgs e)
-        {
-            if (_extension.IsEnabled)
-            {
-                _extension.IsEnabled = false;
-                this.btnStartFinish.Text = "Start";
-            }
-            else
-            {
-                _extension.IsEnabled = true;
-                this.btnStartFinish.Text = "Finish";
-            }
         }
 
 
@@ -57,15 +50,39 @@ namespace PsRipper
             this.lblMessage.Text = message;
         }
 
+
         private void OnCourseSelectionChanged(object sender, EventArgs e)
         {
             var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            txtSaveLocation.Text = Path.Combine(desktopPath, "PsRipper", ddlCourse.Text);
+            var selectedCourse = (PsCourse)ddlCourse.SelectedItem;
+            txtSaveLocation.Text = Path.Combine(desktopPath, "PsRipper", MakeSafeFileName(selectedCourse.Title));
+            _extension.IsEnabled = true;
         }
+
 
         private void OnCourseEnter(object sender, EventArgs e)
         {
-            MessageBox.Show("entering");
+            if (this.PsInfo != null) return;
+            var cursor = Cursor.Current;
+            Cursor.Current = Cursors.WaitCursor;
+            var json = (new WebClient()).DownloadString("http://www.pluralsight.com/training/metadata/live/courses");
+            this.PsInfo = JsonConvert.DeserializeObject<PsInfo>(json);
+            foreach (var course in this.PsInfo.Courses.OrderBy(c => c.Title)) 
+            {
+                ddlCourse.Items.Add(course);
+            }
+            Cursor.Current = cursor;
+        }
+
+
+        private string MakeSafeFileName(string input)
+        {
+            foreach (var nastyCharacter in Path.GetInvalidFileNameChars())
+            {
+                input = input.Replace(nastyCharacter.ToString(), string.Empty);
+            }
+
+            return input;
         }
     }
 }

@@ -34,6 +34,10 @@
     <Reference Include="Fiddler">
       <HintPath>..\..\..\..\..\Program Files (x86)\Fiddler2\Fiddler.exe</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -46,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PsInfo.cs" />
     <Compile Include="PsRipperStartup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControlPsRipper.cs">
@@ -60,7 +65,14 @@
       <DependentUpon>UserControlPsRipper.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(TargetPath) %25USERPROFILE%25\Documents\Fiddler2\Scripts
+copy $(TargetDir)Newtonsoft.Json.dll %25USERPROFILE%25\Documents\Fiddler2\Scripts</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
