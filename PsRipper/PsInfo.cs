@@ -36,6 +36,13 @@ namespace PsRipper
         {
             return this.Title;
         }
+
+        public List<PsModule> ModuleList { get; set; }
+
+        public PsCourse()
+        {
+            ModuleList = new List<PsModule>();
+        }
     }
 
 

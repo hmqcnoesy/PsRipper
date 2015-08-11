@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HtmlFileMaker.cs" />
     <Compile Include="PsInfo.cs" />
     <Compile Include="PsRipperStartup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

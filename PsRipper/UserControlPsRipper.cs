@@ -18,25 +18,6 @@ namespace PsRipper
 
         public PsInfo PsInfo { get; set; }
 
-        public PsCourse SelectedCourse { get; set; }
-
-        public List<string> VideoMimeTypes
-        {
-            get
-            {
-                return txtVideoMimeTypes.Lines.ToList();
-            }
-        }
-
-
-        public string SaveLocation
-        {
-            get
-            {
-                return txtSaveLocation.Text;
-            }
-        }
-
 
         public UserControlPsRipper(PsRipperExtension extension)
         {
@@ -45,18 +26,11 @@ namespace PsRipper
         }
 
 
-        public void DisplayMessage(string message)
-        {
-            this.lblMessage.Text = message;
-        }
-
-
         private void OnCourseSelectionChanged(object sender, EventArgs e)
         {
             var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             var selectedCourse = (PsCourse)ddlCourse.SelectedItem;
             txtSaveLocation.Text = Path.Combine(desktopPath, "PsRipper", MakeSafeFileName(selectedCourse.Title));
-            _extension.IsEnabled = true;
         }
 
 
@@ -83,6 +57,26 @@ namespace PsRipper
             }
 
             return input;
+        }
+
+        private void OnClickSaveButton(object sender, EventArgs e)
+        {
+            var mimeTypes = txtVideoMimeTypes.Lines.ToList();
+
+            var saveLocation = txtSaveLocation.Text;
+            if (!Directory.Exists(saveLocation))
+            {
+                Directory.CreateDirectory(saveLocation);
+            }
+
+            var selectedCourse = (PsCourse)ddlCourse.SelectedItem;
+            var courseModuleIds = selectedCourse.Modules.Split(",".ToCharArray()).Select(m => int.Parse(m));
+            foreach(var moduleId in courseModuleIds)
+            {
+                selectedCourse.ModuleList.Add(PsInfo.Modules.ElementAt(moduleId));
+            }
+
+            _extension.RipSessions(selectedCourse, saveLocation, mimeTypes);
         }
     }
 }

@@ -9,16 +9,12 @@ using System.IO;
 
 namespace PsRipper
 {
-    public class PsRipperExtension : Fiddler.IFiddlerExtension, Fiddler.IAutoTamper
+    public class PsRipperExtension : Fiddler.IFiddlerExtension
     {
         private UserControlPsRipper _userControl;
-        private int _count = 0;
-
-        public bool IsEnabled { get; set; }
 
         void IFiddlerExtension.OnLoad()
         {
-            IsEnabled = false;
             var tabPage = new TabPage("PS Ripper");
             tabPage.ImageIndex = (int)Fiddler.SessionIcons.Video;
             _userControl = new UserControlPsRipper(this);
@@ -27,28 +23,26 @@ namespace PsRipper
             Fiddler.FiddlerApplication.UI.tabsViews.TabPages.Add(tabPage);
         }
 
-        void IAutoTamper.AutoTamperResponseAfter(Session oSession)
+        void IFiddlerExtension.OnBeforeUnload()
         {
-            if (!IsEnabled) return;
-            if (!_userControl.VideoMimeTypes.Contains(oSession.oResponse.MIMEType)) return;
-            var url = oSession.fullUrl.Contains("?") ? oSession.fullUrl.Remove(oSession.fullUrl.IndexOf('?')) : oSession.fullUrl;
-            var filenameExtension = url.Substring(url.LastIndexOf('.'));
-            if (!Directory.Exists(_userControl.SaveLocation)) Directory.CreateDirectory(_userControl.SaveLocation);
-            var filename = Path.Combine(_userControl.SaveLocation, _count.ToString().PadLeft(3, '0') + ".wmv");
-            oSession.SaveResponseBody(filename);
-            _count++;
-
-            _userControl.DisplayMessage("Saved " + filename);
         }
 
-        void IAutoTamper.AutoTamperRequestAfter(Session oSession) { }
 
-        void IAutoTamper.AutoTamperRequestBefore(Session oSession) { }
+        internal void RipSessions(PsCourse selectedCourse, string saveLocation, List<string> mimeTypes)
+        {
+            var count = 0;
 
-        void IAutoTamper.AutoTamperResponseBefore(Session oSession) { }
+            var matchingSessions = Fiddler.FiddlerApplication.UI.GetAllSessions()
+                .Where(s => mimeTypes.Contains(s.oResponse.MIMEType))
+                .ToList();
 
-        void IAutoTamper.OnBeforeReturningError(Session oSession) { }
+            foreach(var session in matchingSessions.OrderBy(s => s.id))
+            {
+                var path = Path.Combine(saveLocation, count++.ToString().PadLeft(3, '0') + ".wmv");
+                session.SaveResponseBody(path); 
+            }
 
-        void IFiddlerExtension.OnBeforeUnload() { }
+            HtmlFileMaker.CreateHtmlFile(saveLocation, selectedCourse);
+        }
     }
 }
