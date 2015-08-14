@@ -154,6 +154,7 @@ namespace PsRipper
         private static string GetJavaScript()
         {
             return @"
+            <script>
                 var liElements = document.getElementsByTagName('li');
                 var courseTitle = document.getElementById('h1').innerHTML;
                 var videoElement = document.getElementById('video');
@@ -196,7 +197,7 @@ namespace PsRipper
 		                videoElement.defaultPlaybackRate = Number(settingsElement[i].innerHTML);
 	                });
                 }
-";
+            </script>";
         }
     }
 }
