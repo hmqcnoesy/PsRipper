@@ -46,7 +46,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -71,8 +70,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) %25USERPROFILE%25\Documents\Fiddler2\Scripts
-copy $(TargetDir)Newtonsoft.Json.dll %25USERPROFILE%25\Documents\Fiddler2\Scripts</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "%25USERPROFILE%25\Documents\Fiddler2\Scripts"
+copy "$(TargetDir)Newtonsoft.Json.dll" "%25USERPROFILE%25\Documents\Fiddler2\Scripts"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

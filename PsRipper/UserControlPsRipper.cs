@@ -34,20 +34,6 @@ namespace PsRipper
         }
 
 
-        private void OnCourseEnter(object sender, EventArgs e)
-        {
-            if (this.PsInfo != null) return;
-            var cursor = Cursor.Current;
-            Cursor.Current = Cursors.WaitCursor;
-            var json = (new WebClient()).DownloadString("http://www.pluralsight.com/training/metadata/live/courses");
-            this.PsInfo = JsonConvert.DeserializeObject<PsInfo>(json);
-            foreach (var course in this.PsInfo.Courses.OrderBy(c => c.Title)) 
-            {
-                ddlCourse.Items.Add(course);
-            }
-            Cursor.Current = cursor;
-        }
-
 
         private string MakeSafeFileName(string input)
         {
@@ -77,6 +63,29 @@ namespace PsRipper
             }
 
             _extension.RipSessions(selectedCourse, saveLocation, mimeTypes);
+        }
+
+
+        private void OnClickReloadButton(object sender, EventArgs e)
+        {
+            btnReload.Enabled = false;
+            btnReload.Text = "Working";
+            var webClient = new WebClient();
+            webClient.DownloadStringAsync(new Uri("http://www.pluralsight.com/training/metadata/live/courses"));
+            webClient.DownloadStringCompleted += WebClient_DownloadStringCompleted;
+        }
+
+
+        private void WebClient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            var json = e.Result;
+            this.PsInfo = JsonConvert.DeserializeObject<PsInfo>(json);
+            foreach (var course in this.PsInfo.Courses.OrderBy(c => c.Title))
+            {
+                ddlCourse.Items.Add(course);
+            }
+            btnReload.Enabled = true;
+            btnReload.Text = "Reload";
         }
     }
 }
