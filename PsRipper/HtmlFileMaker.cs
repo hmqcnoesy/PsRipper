@@ -24,7 +24,9 @@ namespace PsRipper
                 <head>
                 <meta charset=""utf-8"">
                 <title>{0}</title>
-                <style>{1}</style>
+                <style>
+                    {1}
+                </style>
                 </head>", course.Title, GetCss());
         }
 
@@ -32,77 +34,128 @@ namespace PsRipper
         private static string GetCss()
         {
             return @"
-                html
-                {
-                    background-color: gainsboro;
-                    overflow: -moz-scrollbars-vertical; 
-                    overflow-y: scroll;
-                }
+                    html
+					{
+						margin: 0;
+						padding: 0;
+					}
 
-                body
-                {
-                    box-shadow: 0.1em 0.1em 0.5em #000;
-                    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
-                    font-size: 1.5em;
-                    padding: 0.5em;
-                    margin: 0.5em;
-                    background-color: #3d3d3d;
-                }
+					body
+					{
+						margin: 0;
+						padding: 0;
+						font-family: Segoe UI, Helvetica, sans-serif;
+					}
 
-                header
-                {
-                    position: relative;
-                    left: 0px;
-                    top: 0px;
-                }
+					div#toggleon 
+					{
+						cursor: default;
+						background-color: gainsboro;
+						color: black;
+						padding: 4px;
+						font-size: 2em;
+						border: 2px solid white;
+						z-index: 2;
+						position: fixed;
+						top: 0px;
+						left: 0px;
+						opacity: 0.5;
+					}
 
-                h1
-                {
-                    margin: 0px;
-                    font-size: 2em;
-                    text-shadow: 0.05em 0.05em 0.1em #333;
-                    color: white;
-                    width: auto;
-                    background-image: url('mongoose.png');
-                    background-repeat: no-repeat;
-                    padding-left: 150px;
-                }
+					div#settings
+					{
+						background-color: gainsboro;
+						border: 2px solid white;
+						z-index: 3;
+						position: fixed;
+						top: 0px;
+						left: 0px;
+						cursor: default;
+						padding: 4px;
+					}
 
-                input
-                {
-                    float: right;
-                    padding: 0.2em;
-                    margin: 0.4em;
-                    font-size: 0.8em;
-                    width: 10em;
-                    display: block;
-                    position: absolute;
-                    right: 0px;
-                    bottom: 0px;
-                }
+					span.speedsetting 
+					{
+						background-color: black;
+						color: white;
+						padding: 4px;
+						margin: 4px;
+						font-size: 2em;
+						border: 2px solid white;
+						cursor: default;
+					}
 
-                div#errors
-                {
-                    color: red;
-                }
+					div#toc
+					{
+						background-color: black;
+						position: absolute;
+						top: 0px;
+						left: 0px;
+						width: 16%;
+						height: 100%;
+						margin: 0;
+						padding: 0;
+						overflow-y: scroll;
+						z-index: 1;
+					}
 
-                a
-                {
-                    display: block;
-                    color: white;
-                    border: 1px solid gainsboro;
-                    padding: 0.4em;
-                    margin: 0.4em;
-                    background-color: #080808;
-                    text-decoration: none;
-                }
+					div#vid
+					{
+						position: absolute;
+						left: 16%;
+						top: 0px;
+						width: 84%;
+						height: 100%;
+						margin: 0;
+						padding: 0;
+						background-color: black;
+						z-index: 0;
+					}
 
-                a:hover, a:active, a:focus
-                {
-                    border: 1px solid white;
-                    background-color: #3d3d3d;
-                    text-decoration: underline;
-                }
+					h1
+					{
+						font-size: 14pt;
+						font-weight: bold;
+						background-color: black;
+						color: white;
+						margin: 0px;
+						padding: 4px 2px 4px 2px;
+					}
+
+					h2
+					{
+						font-size: 13pt;
+						font-weight: bold;
+						background-color: #333;
+						color: white;
+						margin: 0px;
+						margin-top: 48px;
+						padding: 4px 2px 4px 2px;
+					}
+
+					ul
+					{
+						padding: 0;
+						margin: 0;
+					}
+
+					li
+					{
+						color: white;
+						border: 1px solid #333;
+						padding: 0.8em;
+						margin: 0.4em;
+						background-color: #181818;
+						text-decoration: none;
+					}
+
+					.selected
+					{
+						border-left: 0.8em  solid #333;
+						padding-left: 1px !important;
+						/*background-color: #444444;*/
+					}
+
                 .nodisplay { display: none; }
             ";
         }
@@ -138,14 +191,13 @@ namespace PsRipper
 	
 	            foreach(var clip in module.Clips) 
 	            {
-		            sb.AppendLine(string.Format("<li data-href=\"{0}.mp4\">{1}</li>", clipCount++, clip.Title));
+		            sb.AppendLine(string.Format("<li data-href=\"{0}.mp4\">{1}</li>", clipCount++.ToString("000"), clip.Title));
 	            }
 	            sb.AppendLine("</ul>");
             }
 
             sb.AppendLine("</div>");
-            sb.AppendLine("<div id=\"vid\"><video id=\"video\" width=\"1280\" height=\"960\" controls></video></div>");
-            sb.AppendLine("</body>");
+            sb.AppendLine("<div id=\"vid\"><video id=\"video\" width=\"100%\" height=\"100%\" controls></video></div>");
 
             return string.Format(body, sb.ToString(), GetJavaScript());
         }
@@ -154,31 +206,35 @@ namespace PsRipper
         private static string GetJavaScript()
         {
             return @"
-            <script>
+			<script>
                 var liElements = document.getElementsByTagName('li');
                 var courseTitle = document.getElementById('h1').innerHTML;
                 var videoElement = document.getElementById('video');
 
                 for (var i = 0; i < liElements.length; i++) {
-	                var clipTitle = liElements[i].innerHTML;
-	                var videoId = courseTitle + clipTitle;
-	                if (localStorage.getItem(videoId)) {
+	                var clipNumber = liElements[i].getAttribute('data-href');
+	                var videoId = courseTitle + clipNumber;
+	                if (localStorage[videoId]) {
 		                liElements[i].classList.add('selected');
 	                } else {
 		                liElements[i].classList.remove('selected');
 	                }
 	
-	                liElements[i].addEventListener('click', function() {
-		                videoElement.src = liElements[i].dataHref;
+	                liElements[i].addEventListener('click', function(event) {
+						var clickedElement = event.target;
+						var href = clickedElement.getAttribute('data-href');
+						var videoId = courseTitle + href;
+						
+		                videoElement.src = href;
 		                videoElement.load();
 		                videoElement.play();
 		
-		                if (localStorage.getItem(videoId)) {
+		                if (localStorage[videoId]) {
 			                localStorage.removeItem(videoId);
-			                liElements[i].classList.remove('selected');
+			                clickedElement.classList.remove('selected');
 		                } else {
 			                localStorage.setItem(videoId, videoId);
-			                liElements[i].classList.add('selected');
+			                clickedElement.classList.add('selected');
 		                }
 	                });
                 }
@@ -190,14 +246,15 @@ namespace PsRipper
                 });
 
                 var speedElements = document.querySelectorAll('.speedsetting');
-                foreach(var i = 0; i < speedElements.length; i++) {
-	                speedElements[i].addEventListener('click', function() {
-		                settingsElement.classList.add('nodisplay');
-		                videoElement.playbackRate = Number(settingsElement[i].innerHTML);
-		                videoElement.defaultPlaybackRate = Number(settingsElement[i].innerHTML);
+                for(var i = 0; i < speedElements.length; i++) {
+	                speedElements[i].addEventListener('click', function(event) {
+		                var speedButton = event.target;
+		                videoElement.playbackRate = Number(speedButton.innerHTML);
+		                videoElement.defaultPlaybackRate = Number(speedButton.innerHTML);
+						settingsElement.classList.add('nodisplay');
 	                });
                 }
-            </script>";
+			</script>";
         }
     }
 }
