@@ -28,7 +28,7 @@ namespace PsRipper
         }
 
 
-        internal void RipSessions(PsCourse selectedCourse, string saveLocation, List<string> mimeTypes)
+        internal void RipSessions(PsCourse selectedCourse, string saveLocation, List<string> mimeTypes, bool clearSessions)
         {
             var count = 0;
 
@@ -43,6 +43,9 @@ namespace PsRipper
             }
 
             HtmlFileMaker.CreateHtmlFile(saveLocation, selectedCourse);
+            PowerShellFile.AddConversionScript(saveLocation);
+
+            if (clearSessions) Fiddler.FiddlerApplication.UI.actRemoveAllSessions();
         }
     }
 }

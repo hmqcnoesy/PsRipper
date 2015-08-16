@@ -62,7 +62,7 @@ namespace PsRipper
                 selectedCourse.ModuleList.Add(PsInfo.Modules.ElementAt(moduleId));
             }
 
-            _extension.RipSessions(selectedCourse, saveLocation, mimeTypes);
+            _extension.RipSessions(selectedCourse, saveLocation, mimeTypes, chkClearSessions.Checked);
         }
 
 
