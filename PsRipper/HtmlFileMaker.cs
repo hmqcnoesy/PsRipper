@@ -147,6 +147,7 @@ namespace PsRipper
 						margin: 0.4em;
 						background-color: #181818;
 						text-decoration: none;
+                        cursor: pointer;
 					}
 
 					.selected

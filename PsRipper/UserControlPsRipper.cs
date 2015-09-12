@@ -45,16 +45,9 @@ namespace PsRipper
             return input;
         }
 
+
         private void OnClickSaveButton(object sender, EventArgs e)
-        {
-            var mimeTypes = txtVideoMimeTypes.Lines.ToList();
-
-            var saveLocation = txtSaveLocation.Text;
-            if (!Directory.Exists(saveLocation))
-            {
-                Directory.CreateDirectory(saveLocation);
-            }
-
+        {            
             var selectedCourse = (PsCourse)ddlCourse.SelectedItem;
             var courseModuleIds = selectedCourse.Modules.Split(",".ToCharArray()).Select(m => int.Parse(m));
             foreach(var moduleId in courseModuleIds)
@@ -62,7 +55,16 @@ namespace PsRipper
                 selectedCourse.ModuleList.Add(PsInfo.Modules.ElementAt(moduleId));
             }
 
-            _extension.RipSessions(selectedCourse, saveLocation, mimeTypes, chkClearSessions.Checked);
+            var options = new RipOptions
+            {
+                SelectedCourse = selectedCourse,
+                SaveLocation = txtSaveLocation.Text,
+                MimeTypes = txtVideoMimeTypes.Lines.ToList(),
+                ClearSessions = chkClearSessions.Checked
+            };
+
+            var ripper = new Ripper();
+            ripper.Rip(options);
         }
 
 

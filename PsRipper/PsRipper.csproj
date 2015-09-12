@@ -54,6 +54,8 @@
     <Compile Include="PsInfo.cs" />
     <Compile Include="PsRipperStartup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RipOptions.cs" />
+    <Compile Include="Ripper.cs" />
     <Compile Include="UserControlPsRipper.cs">
       <SubType>UserControl</SubType>
     </Compile>

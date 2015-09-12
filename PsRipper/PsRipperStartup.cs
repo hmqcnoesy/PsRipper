@@ -26,26 +26,5 @@ namespace PsRipper
         void IFiddlerExtension.OnBeforeUnload()
         {
         }
-
-
-        internal void RipSessions(PsCourse selectedCourse, string saveLocation, List<string> mimeTypes, bool clearSessions)
-        {
-            var count = 0;
-
-            var matchingSessions = Fiddler.FiddlerApplication.UI.GetAllSessions()
-                .Where(s => mimeTypes.Contains(s.oResponse.MIMEType))
-                .ToList();
-
-            foreach(var session in matchingSessions.OrderBy(s => s.id))
-            {
-                var path = Path.Combine(saveLocation, count++.ToString().PadLeft(3, '0') + ".wmv");
-                session.SaveResponseBody(path); 
-            }
-
-            HtmlFileMaker.CreateHtmlFile(saveLocation, selectedCourse);
-            PowerShellFile.AddConversionScript(saveLocation);
-
-            if (clearSessions) Fiddler.FiddlerApplication.UI.actRemoveAllSessions();
-        }
     }
 }
