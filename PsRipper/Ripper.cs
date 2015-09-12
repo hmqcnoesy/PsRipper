@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PsRipper
 {
     public class Ripper
     {
-        public void Rip(RipOptions options)
+        public async Task Rip(RipOptions options)
         {
             if (!Directory.Exists(options.SaveLocation))
             {
@@ -24,7 +25,7 @@ namespace PsRipper
             foreach (var session in matchingSessions.OrderBy(s => s.id))
             {
                 var path = Path.Combine(options.SaveLocation, count++.ToString().PadLeft(3, '0') + ".wmv");
-                session.SaveResponseBody(path);
+                await Task.Run(() => session.SaveResponseBody(path));
             }
 
             HtmlFileMaker.CreateHtmlFile(options.SaveLocation, options.SelectedCourse);

@@ -37,11 +37,12 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.btnReload = new System.Windows.Forms.Button();
             this.chkClearSessions = new System.Windows.Forms.CheckBox();
+            this.lblInfo = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtVideoMimeTypes
             // 
-            this.txtVideoMimeTypes.Location = new System.Drawing.Point(14, 30);
+            this.txtVideoMimeTypes.Location = new System.Drawing.Point(14, 70);
             this.txtVideoMimeTypes.Margin = new System.Windows.Forms.Padding(2);
             this.txtVideoMimeTypes.Multiline = true;
             this.txtVideoMimeTypes.Name = "txtVideoMimeTypes";
@@ -52,7 +53,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 10);
+            this.label1.Location = new System.Drawing.Point(11, 50);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(89, 13);
             this.label1.TabIndex = 3;
@@ -61,7 +62,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(11, 190);
+            this.label2.Location = new System.Drawing.Point(11, 230);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(79, 13);
             this.label2.TabIndex = 3;
@@ -73,7 +74,7 @@
             this.ddlCourse.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.ddlCourse.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ddlCourse.FormattingEnabled = true;
-            this.ddlCourse.Location = new System.Drawing.Point(14, 160);
+            this.ddlCourse.Location = new System.Drawing.Point(14, 200);
             this.ddlCourse.Margin = new System.Windows.Forms.Padding(2);
             this.ddlCourse.Name = "ddlCourse";
             this.ddlCourse.Size = new System.Drawing.Size(347, 21);
@@ -83,7 +84,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(11, 138);
+            this.label3.Location = new System.Drawing.Point(11, 178);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(43, 13);
             this.label3.TabIndex = 5;
@@ -91,7 +92,7 @@
             // 
             // txtSaveLocation
             // 
-            this.txtSaveLocation.Location = new System.Drawing.Point(14, 214);
+            this.txtSaveLocation.Location = new System.Drawing.Point(14, 254);
             this.txtSaveLocation.Margin = new System.Windows.Forms.Padding(2);
             this.txtSaveLocation.Name = "txtSaveLocation";
             this.txtSaveLocation.Size = new System.Drawing.Size(347, 20);
@@ -99,7 +100,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(365, 213);
+            this.btnSave.Location = new System.Drawing.Point(365, 253);
             this.btnSave.Margin = new System.Windows.Forms.Padding(2);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(66, 20);
@@ -110,7 +111,7 @@
             // 
             // btnReload
             // 
-            this.btnReload.Location = new System.Drawing.Point(365, 160);
+            this.btnReload.Location = new System.Drawing.Point(365, 200);
             this.btnReload.Margin = new System.Windows.Forms.Padding(2);
             this.btnReload.Name = "btnReload";
             this.btnReload.Size = new System.Drawing.Size(66, 21);
@@ -124,12 +125,21 @@
             this.chkClearSessions.AutoSize = true;
             this.chkClearSessions.Checked = true;
             this.chkClearSessions.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkClearSessions.Location = new System.Drawing.Point(14, 249);
+            this.chkClearSessions.Location = new System.Drawing.Point(14, 289);
             this.chkClearSessions.Name = "chkClearSessions";
             this.chkClearSessions.Size = new System.Drawing.Size(156, 17);
             this.chkClearSessions.TabIndex = 8;
             this.chkClearSessions.Text = "Clear all sessions after save";
             this.chkClearSessions.UseVisualStyleBackColor = true;
+            // 
+            // lblInfo
+            // 
+            this.lblInfo.AutoSize = true;
+            this.lblInfo.Location = new System.Drawing.Point(11, 10);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(89, 13);
+            this.lblInfo.TabIndex = 3;
+            this.lblInfo.Text = "Rip MIME Types:";
             // 
             // UserControlPsRipper
             // 
@@ -142,6 +152,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.ddlCourse);
             this.Controls.Add(this.label2);
+            this.Controls.Add(this.lblInfo);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtVideoMimeTypes);
             this.Name = "UserControlPsRipper";
@@ -161,5 +172,6 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnReload;
         private System.Windows.Forms.CheckBox chkClearSessions;
+        private System.Windows.Forms.Label lblInfo;
     }
 }

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Net;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace PsRipper
 {
@@ -23,6 +24,7 @@ namespace PsRipper
         {
             InitializeComponent();
             _extension = extension;
+            lblInfo.Text = "Modified: " + File.GetLastWriteTime(Assembly.GetAssembly(this.GetType()).Location).ToString("yy-MM-dd hh:mm:ss");
         }
 
 
@@ -46,7 +48,7 @@ namespace PsRipper
         }
 
 
-        private void OnClickSaveButton(object sender, EventArgs e)
+        private async void OnClickSaveButton(object sender, EventArgs e)
         {            
             var selectedCourse = (PsCourse)ddlCourse.SelectedItem;
             var courseModuleIds = selectedCourse.Modules.Split(",".ToCharArray()).Select(m => int.Parse(m));
@@ -64,7 +66,7 @@ namespace PsRipper
             };
 
             var ripper = new Ripper();
-            ripper.Rip(options);
+            await ripper.Rip(options);
         }
 
 
