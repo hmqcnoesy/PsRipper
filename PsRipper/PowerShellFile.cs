@@ -16,7 +16,7 @@ namespace PsRipper
                     $outputFileName = [System.IO.Path]::Combine($inputFile.DirectoryName, $outputFileName);
      
                     $processName = ""c:\program files (x86)\Handbrake\HandbrakeCLI.exe""
-                    $processArgs = ""-i `""$($inputFile.FullName)`"" -o `""$outputFileName`"" --ab 64""
+                    $processArgs = ""-i `""$($inputFile.FullName)`"" -o `""$outputFileName`"" --ab 64 -e x264""
                     $outputFileName
                     start-process $processName $processArgs -WindowStyle Hidden -wait
                 }}", saveLocation);
