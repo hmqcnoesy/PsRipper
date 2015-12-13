@@ -37,8 +37,8 @@ namespace PsRipper
 					body { margin: 0; padding: 0; font-family: Segoe UI, Helvetica, sans-serif; }
 					div#settings { background-color: black; padding: 4px; line-height: 2em; } 
 					input { display: none; } 
-					input:checked + label { background-color: black; } 
-					label { background-color: darkgray; color: white; padding: 0.01em 0.5em; margin: 0.02em; font-size: 1em; border: 2px solid white; cursor: pointer; }
+					input:checked + label { padding-left: 1px !important; border-left: 0.5em solid #333 !important; } 
+					label { color: white;padding: 0.01em 0.5em;margin: 0.02em;border: 1px solid #333;background-color: #181818;cursor: pointer; }
 					div#toc { background-color: black; position: absolute; top: 0px; left: 0px; width: 16%; height: 100%; margin: 0; padding: 0; overflow-y: scroll; z-index: 1; }
 					div#vid { position: absolute; left: 16%; top: 0px; width: 84%; height: 100%; margin: 0; padding: 0; background-color: black; z-index: 0; }
 					h1 { font-size: 14pt; font-weight: bold; background-color: black; color: white; margin: 0px; padding: 4px 2px 4px 2px;}
