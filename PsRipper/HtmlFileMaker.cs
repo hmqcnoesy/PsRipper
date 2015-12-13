@@ -33,132 +33,19 @@ namespace PsRipper
 
         private static string GetCss()
         {
-            return @"
-                    html
-					{
-						margin: 0;
-						padding: 0;
-					}
-
-					body
-					{
-						margin: 0;
-						padding: 0;
-						font-family: Segoe UI, Helvetica, sans-serif;
-					}
-
-					div#toggleon 
-					{
-						cursor: default;
-						background-color: gainsboro;
-						color: black;
-						padding: 4px;
-						font-size: 2em;
-						border: 2px solid white;
-						z-index: 2;
-						position: fixed;
-						top: 0px;
-						left: 0px;
-						opacity: 0.5;
-					}
-
-					div#settings
-					{
-						background-color: gainsboro;
-						border: 2px solid white;
-						z-index: 3;
-						position: fixed;
-						top: 0px;
-						left: 0px;
-						cursor: default;
-						padding: 4px;
-					}
-
-					span.speedsetting 
-					{
-						background-color: black;
-						color: white;
-						padding: 4px;
-						margin: 4px;
-						font-size: 2em;
-						border: 2px solid white;
-						cursor: default;
-					}
-
-					div#toc
-					{
-						background-color: black;
-						position: absolute;
-						top: 0px;
-						left: 0px;
-						width: 16%;
-						height: 100%;
-						margin: 0;
-						padding: 0;
-						overflow-y: scroll;
-						z-index: 1;
-					}
-
-					div#vid
-					{
-						position: absolute;
-						left: 16%;
-						top: 0px;
-						width: 84%;
-						height: 100%;
-						margin: 0;
-						padding: 0;
-						background-color: black;
-						z-index: 0;
-					}
-
-					h1
-					{
-						font-size: 14pt;
-						font-weight: bold;
-						background-color: black;
-						color: white;
-						margin: 0px;
-						padding: 4px 2px 4px 2px;
-					}
-
-					h2
-					{
-						font-size: 13pt;
-						font-weight: bold;
-						background-color: #333;
-						color: white;
-						margin: 0px;
-						margin-top: 48px;
-						padding: 4px 2px 4px 2px;
-					}
-
-					ul
-					{
-						padding: 0;
-						margin: 0;
-					}
-
-					li
-					{
-						color: white;
-						border: 1px solid #333;
-						padding: 0.8em;
-						margin: 0.4em;
-						background-color: #181818;
-						text-decoration: none;
-                        cursor: pointer;
-					}
-
-					.selected
-					{
-						border-left: 0.8em  solid #333;
-						padding-left: 1px !important;
-						/*background-color: #444444;*/
-					}
-
-                .nodisplay { display: none; }
-            ";
+            return @"html { margin: 0; padding: 0; }
+					body { margin: 0; padding: 0; font-family: Segoe UI, Helvetica, sans-serif; }
+					div#settings { background-color: black; padding: 4px; line-height: 2em; } 
+					input { display: none; } 
+					input:checked + label { background-color: black; } 
+					label { background-color: darkgray; color: white; padding: 0.01em 0.5em; margin: 0.02em; font-size: 1em; border: 2px solid white; cursor: pointer; }
+					div#toc { background-color: black; position: absolute; top: 0px; left: 0px; width: 16%; height: 100%; margin: 0; padding: 0; overflow-y: scroll; z-index: 1; }
+					div#vid { position: absolute; left: 16%; top: 0px; width: 84%; height: 100%; margin: 0; padding: 0; background-color: black; z-index: 0; }
+					h1 { font-size: 14pt; font-weight: bold; background-color: black; color: white; margin: 0px; padding: 4px 2px 4px 2px;}
+					h2 { font-size: 13pt; font-weight: bold; background-color: #333; color: white; margin: 0px; margin-top: 48px; padding: 4px 2px 4px 2px; }
+					ul { padding: 0; margin: 0; } 
+					li { color: white; border: 1px solid #333; padding: 0.8em; margin: 0.4em; background-color: #181818; text-decoration: none; cursor: pointer; }
+					.selected { border-left: 0.8em  solid #333; padding-left: 1px !important; }";
         }
 
 
@@ -172,14 +59,15 @@ namespace PsRipper
                 ";
 
             var sb = new StringBuilder(string.Format(@"
-                <div id=""toggleon"">&gt;&gt;</div>
-                <div id=""settings"" class=""nodisplay"">
-	                <span class=""speedsetting"" data-speed=""1.0"">1.0</span>
-	                <span class=""speedsetting"" data-speed=""1.2"">1.2</span>
-	                <span class=""speedsetting"" data-speed=""1.5"">1.5</span>
-	                <span class=""speedsetting"" data-speed=""2.0"">2.0</span>
-                </div>
                 <div id=""toc"">
+                    
+                <div id=""settings"">
+						<input type=""radio"" name=""speed"" value=""1.00"" id=""rb100"" checked /><label for=""rb100"">1.0</label>
+						<input type=""radio"" name=""speed"" value=""1.25"" id=""rb125"" /><label for=""rb125"">1.25</label>
+						<input type=""radio"" name=""speed"" value=""1.50"" id=""rb150"" /><label for=""rb150"">1.5</label>
+						<input type=""radio"" name=""speed"" value=""2.00"" id=""rb200"" /><label for=""rb200"">2.0</label>
+						<input type=""checkbox"" id=""chkAuto"" checked /><label for=""chkAuto"">Autoplay</label>
+                </div>
                 <h1 id=""h1"">{0}</h1>", course.Title));
 
             
@@ -211,6 +99,15 @@ namespace PsRipper
                 var liElements = document.getElementsByTagName('li');
                 var courseTitle = document.getElementById('h1').innerHTML;
                 var videoElement = document.getElementById('video');
+				
+				videoElement.onended = function() { 
+					if (!document.getElementById('chkAuto').checked) return;
+					var currentVideoNumber = parseInt(videoElement.getAttribute('src').substring(0, 3));
+					var updatedVideoNumber = (1 + currentVideoNumber);
+					updatedVideoNumber = '000'.substring(0, 3 - updatedVideoNumber.toString().length) + updatedVideoNumber + '.mp4';
+					var liToClick = document.querySelector('li[data-href=""' + updatedVideoNumber + '""]');
+					if (liToClick) liToClick.click();
+				}
 
                 for (var i = 0; i < liElements.length; i++) {
 	                var clipNumber = liElements[i].getAttribute('data-href');
@@ -240,19 +137,12 @@ namespace PsRipper
 	                });
                 }
 
-                var settingsElement = document.getElementById('settings');
-                var toggleOn = document.getElementById('toggleon');
-                toggleOn.addEventListener('click', function() {
-	                settingsElement.classList.remove('nodisplay');
-                });
-
-                var speedElements = document.querySelectorAll('.speedsetting');
+                var speedElements = document.querySelectorAll('input[type=radio]');
                 for(var i = 0; i < speedElements.length; i++) {
 	                speedElements[i].addEventListener('click', function(event) {
 		                var speedButton = event.target;
-		                videoElement.playbackRate = Number(speedButton.innerHTML);
-		                videoElement.defaultPlaybackRate = Number(speedButton.innerHTML);
-						settingsElement.classList.add('nodisplay');
+		                videoElement.playbackRate = Number(speedButton.value);
+		                videoElement.defaultPlaybackRate = Number(speedButton.value);
 	                });
                 }
 			</script>";
