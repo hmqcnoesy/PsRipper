@@ -32,7 +32,7 @@ namespace PsRipper
                 }}
 
                 if ($create.Length -gt 0 -and $create.Substring(0, 1).ToLower() -eq 'y') {{
-                    $mp4files = get-childitem -Filter *.mp4 | % {{ (""file '"" + $_.FullName + ""'"") }}
+                    $mp4files = get-childitem -Filter *.mp4 | sort | % {{ (""file '"" + $_.FullName + ""'"") }}
                     [System.IO.File]::WriteAllLines(""mp4list.txt"", $mp4files, (New-Object System.Text.UTF8Encoding($false)))
                     $processName = ""ffmpeg""
                     $processArgs = ""-f concat -i mp4list.txt -codec copy """"{0}\{1}.mp4""""""
